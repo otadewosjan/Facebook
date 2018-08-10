@@ -10,9 +10,15 @@ function loadJsonDoc() {
     xhr.onload = function() {
         if (this.status === 200) {
             myDoc = JSON.parse(this.responseText);
-            console.log(myDoc);
+
+            let outputList = "";
+            for(let i in myDoc) {
+                outputList += `<li> ${myDoc[i].title} <hr> ${myDoc[i].body} </li><br><br>`;
+            }
+            document.getElementById("postList").innerHTML = outputList;
+
         }
     };
 
     xhr.send();
-}
+};
