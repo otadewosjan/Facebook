@@ -1,0 +1,11 @@
+#faceheading {
+    color: blue;
+    font-family: 'Courier New', Courier;
+    text-align: center;
+}
+
+#post {
+    border: 2px solid blue;
+    max-width: 500px;
+    margin: 0 auto;
+}
