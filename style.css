@@ -1,0 +1,21 @@
+#faceheading {
+    color: blue;
+    font-family: 'Courier New', Courier;
+    text-align: center;
+}
+
+.post {
+    border: 2px solid blue;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+ul {
+    list-style-position: inside;
+    list-style-type: square;
+}
+
+ul li {
+    margin: 0px 50px 0px 0px;
+    text-align: justify;
+}
