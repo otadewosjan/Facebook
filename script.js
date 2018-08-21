@@ -1,4 +1,15 @@
-import {Post} from '/post.js';
+import { Post } from '/post.js';
 
-let posts = new Post();
-posts.get();
+$(document).ready(function () {
+
+    let posts = new Post();
+    posts.get();
+
+    let win = $(window);
+    win.scroll(function () {
+        if ($(document).height() - win.height() === win.scrollTop()) {
+            
+            posts.get();
+        }
+    });
+});
