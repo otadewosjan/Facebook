@@ -1,15 +1,21 @@
 import { Post } from '/post.js';
 
-$(document).ready(function () {
+let posts = new Post();
+posts.get();
+infiniteScroll(posts);
 
-    let posts = new Post();
-    posts.get();
+function infiniteScroll(obj) {
 
     let win = $(window);
+
+    function isScrollbarAtBottom() {
+        return ($(document).height() - win.height() === Math.floor(win.scrollTop()) ||
+            ($(document).height() - win.height() === Math.floor(win.scrollTop()) + 1));
+    }
+
     win.scroll(function () {
-        if ($(document).height() - win.height() === win.scrollTop()) {
-            
-            posts.get();
+        if (isScrollbarAtBottom()) {
+            obj.get();
         }
     });
-});
+}
