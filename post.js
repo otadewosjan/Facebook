@@ -1,13 +1,16 @@
 export class Post {
 
-    postDisplay() {
-        $.getJSON("http://jsonplaceholder.typicode.com/posts", function (facebookposts) {
-            $.get("templates/facebookposts.hbs", function (template) {
-                let compiledTemplate = Handlebars.compile(template);
-                $(facebookposts).each(function (i, value) {
-                    $("#postList").append(compiledTemplate(value));
-                })
+    get() {
+        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => {this.render(posts)})
+    }
+
+    render(posts) {
+        $.get("templates/facebookposts.hbs", (template) => {
+            let compiledTemplate = Handlebars.compile(template);
+            $(posts).each(function (i, value) {
+                $("#posts").append(compiledTemplate(value));
             });
         });
     }
 }
+
