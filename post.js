@@ -1,7 +1,7 @@
 export class Post {
 
     get() {
-        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => {this.render(posts)})
+        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => {this.render([posts[0],posts[1]])})
     }
 
     render(posts) {
