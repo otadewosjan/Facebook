@@ -1,5 +1,9 @@
 export class Post {
 
+    constructor() {
+        this.divHei = 0;
+    }
+
     get() {
         $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => { this.render([posts[0], posts[1]]) })
     }
@@ -10,7 +14,7 @@ export class Post {
             $(posts).each(function (i, value) {
                 $("#posts").append(compiledTemplate(value));
             });
-            this.infiniteScroll();
+            this.divHei = $(".post").height();
         });
     }
 
@@ -23,6 +27,8 @@ export class Post {
                 ($(document).height() - win.height() === Math.floor(win.scrollTop()) + 1));
         }
 
+        this.get();
+
         win.scroll(() => {
             if (isScrollbarAtBottom()) {
                 this.get();
@@ -30,4 +36,3 @@ export class Post {
         });
     }
 }
-
