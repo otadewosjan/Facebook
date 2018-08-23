@@ -5,7 +5,7 @@ export class Post {
     }
 
     get() {
-        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => { this.render([posts[0], posts[1]]) })
+        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => { this.render([posts[0], posts[1]]); });
     }
 
     render(posts) {
@@ -15,6 +15,9 @@ export class Post {
                 $("#posts").append(compiledTemplate(value));
             });
             this.divHei = $(".post").height();
+            if (this.divHei < $(window).height()) {
+                this.get();
+            }
         });
     }
 
@@ -26,8 +29,6 @@ export class Post {
             return ($(document).height() - win.height() === Math.floor(win.scrollTop()) ||
                 ($(document).height() - win.height() === Math.floor(win.scrollTop()) + 1));
         }
-
-        this.get();
 
         win.scroll(() => {
             if (isScrollbarAtBottom()) {
