@@ -2,21 +2,30 @@ export class Post {
 
     constructor() {
         this.divHei = 0;
+        this.heightCheck = () => {
+            if (this.divHei < $(window).height()) {
+                this.get();
+            };
+        };
     }
 
     get() {
-        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => { this.render([posts[0], posts[1]]); });
+        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => {
+            this.render([posts[0], posts[1]], this.heightCheck);
+        });
     }
 
-    render(posts) {
+    render(posts, callback) {
+
         $.get("templates/facebookposts.hbs", (template) => {
             let compiledTemplate = Handlebars.compile(template);
-            $(posts).each(function (i, value) {
+            $(posts).each((i, value) => {
                 $("#posts").append(compiledTemplate(value));
             });
             this.divHei = $(".post").height();
-            if (this.divHei < $(window).height()) {
-                this.get();
+
+            if (callback) {
+                callback();
             }
         });
     }
@@ -29,6 +38,12 @@ export class Post {
             return ($(document).height() - win.height() === Math.floor(win.scrollTop()) ||
                 ($(document).height() - win.height() === Math.floor(win.scrollTop()) + 1));
         }
+
+        win.resize(() => {
+            if ($(".post").height() < win.height()) {
+                this.get();
+            }
+        });
 
         win.scroll(() => {
             if (isScrollbarAtBottom()) {
