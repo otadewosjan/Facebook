@@ -1,34 +1,40 @@
 export class Post {
 
     constructor() {
+        this.templateURL = "templates/facebookposts.hbs";
+        this.jsonURL = "http://jsonplaceholder.typicode.com/posts";
+        this.compiledTemplate;
         this.divHei = 0;
-        this.heightCheck = () => {
-            if (this.divHei < $(window).height()) {
-                this.get();
-            };
-        };
+    }
+
+    load() {
+        this.getTemplate()
+            .then(this.get());
+    }
+
+    getTemplate() {
+        return ($.get(this.templateURL)
+            .then((template) => { this.compiledTemplate = Handlebars.compile(template); }));
     }
 
     get() {
-        $.getJSON("http://jsonplaceholder.typicode.com/posts", (posts) => {
-            this.render([posts[0], posts[1]], this.heightCheck);
-        });
+        $.getJSON(this.jsonURL)
+            .then((posts) => { this.render([posts[0], posts[1]]) });
     }
 
-    render(posts, callback) {
+    render(posts) {
 
-        $.get("templates/facebookposts.hbs", (template) => {
-            let compiledTemplate = Handlebars.compile(template);
-            $(posts).each((i, value) => {
-                $("#posts").append(compiledTemplate(value));
-            });
-            this.divHei = $(".post").height();
-
-            if (callback) {
-                callback();
-            }
+        $(posts).each((i, value) => {
+            $("#posts").append(this.compiledTemplate(value));
         });
+        this.divHei = $(".post").height();
     }
+
+    heightCheck() {
+        if (this.divHei < $(window).height()) {
+            this.get();
+        };
+    };
 
     infiniteScroll() {
 
@@ -51,4 +57,5 @@ export class Post {
             }
         });
     }
+
 }
