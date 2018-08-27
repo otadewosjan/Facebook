@@ -4,12 +4,12 @@ export class Post {
         this.templateURL = "templates/facebookposts.hbs";
         this.jsonURL = "http://jsonplaceholder.typicode.com/posts";
         this.compiledTemplate;
-        this.divHei = 0;
     }
 
     load() {
         this.getTemplate()
-            .then(this.get());
+            .then(this.get()
+            .then((result) => { this.heightCheck(result) }));
     }
 
     getTemplate() {
@@ -18,27 +18,29 @@ export class Post {
     }
 
     get() {
-        $.getJSON(this.jsonURL)
-            .then((posts) => { this.render([posts[0], posts[1]]) });
+        return $.getJSON(this.jsonURL)
+            .then((posts) => { return this.render([posts[0], posts[1]]) });
     }
 
     render(posts) {
-
-        $(posts).each((i, value) => {
-            $("#posts").append(this.compiledTemplate(value));
+        return new Promise((resolve) => {
+            $(posts).each((i, value) => {
+                $("#posts").append(this.compiledTemplate(value));
+            });
+            resolve($(".post").height());
         });
-        this.divHei = $(".post").height();
     }
 
-    heightCheck() {
-        if (this.divHei < $(window).height()) {
-            this.get();
+    heightCheck(hei) {
+        if (hei < $(window).height()) {
+            this.get().then((result) => { this.heightCheck(result) });
         };
     };
 
     infiniteScroll() {
 
         let win = $(window);
+        this.load();
 
         function isScrollbarAtBottom() {
             return ($(document).height() - win.height() === Math.floor(win.scrollTop()) ||
